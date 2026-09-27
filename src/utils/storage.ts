@@ -19,6 +19,7 @@ import {
 } from '../data/defaults';
 
 const KEYS = {
+  CACHE_VERSION: 'volt_cache_version_v3',
   GENERATORS: 'volt_generators',
   RENTAL_UNITS: 'volt_rental_units',
   PURCHASE_REQUESTS: 'volt_purchase_requests',
@@ -26,6 +27,26 @@ const KEYS = {
   SUPPORT_TICKETS: 'volt_support_tickets',
   TICKET_COUNTER: 'volt_ticket_counter',
 };
+
+// Nettoyage automatique du cache navigateur pour supprimer toutes les anciennes données obsolètes
+export function purgeObsoleteCache(): void {
+  try {
+    const currentVer = localStorage.getItem(KEYS.CACHE_VERSION);
+    if (currentVer !== 'v3') {
+      localStorage.removeItem(KEYS.GENERATORS);
+      localStorage.removeItem(KEYS.RENTAL_UNITS);
+      localStorage.removeItem(KEYS.PURCHASE_REQUESTS);
+      localStorage.removeItem(KEYS.RENTAL_REQUESTS);
+      localStorage.setItem(KEYS.GENERATORS, JSON.stringify(DEFAULT_GENERATORS));
+      localStorage.setItem(KEYS.RENTAL_UNITS, JSON.stringify(DEFAULT_RENTAL_UNITS));
+      localStorage.setItem(KEYS.PURCHASE_REQUESTS, JSON.stringify(DEFAULT_PURCHASE_REQUESTS));
+      localStorage.setItem(KEYS.RENTAL_REQUESTS, JSON.stringify(DEFAULT_RENTAL_REQUESTS));
+      localStorage.setItem(KEYS.CACHE_VERSION, 'v3');
+    }
+  } catch (e) {
+    console.error('Erreur lors du nettoyage de cache', e);
+  }
+}
 
 export interface StorageResult<T> {
   success: boolean;

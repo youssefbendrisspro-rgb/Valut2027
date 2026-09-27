@@ -28,6 +28,7 @@ import {
   saveStoredSupportTickets,
   getNextTicketNumber,
   resetAllToDefaults,
+  purgeObsoleteCache,
 } from './utils/storage';
 
 import { Navbar } from './components/Navbar';
@@ -74,6 +75,7 @@ export default function App() {
 
   // Chargement initial depuis localStorage
   useEffect(() => {
+    purgeObsoleteCache();
     setGenerators(getStoredGenerators());
     setRentalUnits(getStoredRentalUnits());
     setPurchaseRequests(getStoredPurchaseRequests());
